@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: resume-builder-api
+    # mongodb local settings
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/resumebuilder_v2
+
