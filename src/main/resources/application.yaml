@@ -5,4 +5,26 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/resumebuilder_v2
+  # mail config
+  mail:
+    host: smtp-relay.brevo.com
+    port: 587
+    username: 9a8670001@smtp-brevo.com
+    password: ${key}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          from: ${spring_mail_from}
+        starttls:
+          enable: true
+    protocol: smtp
 
+app:
+  base:
+    url: http://localhost:8080
+# cloudinary configuration
+cloudinary:
+  cloud-name: dotiydeyr
+  api-key: 738942934367549
+  api-secret: ${cloudinary_secret}
