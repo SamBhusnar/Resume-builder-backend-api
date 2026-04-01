@@ -1,6 +1,7 @@
 package com.reer.resumebuilder.resume_builder_api.controller;
 
 import com.reer.resumebuilder.resume_builder_api.dto.AuthResponse;
+import com.reer.resumebuilder.resume_builder_api.dto.LoginRequest;
 import com.reer.resumebuilder.resume_builder_api.dto.RegisterRequest;
 import com.reer.resumebuilder.resume_builder_api.service.AuthService;
 import com.reer.resumebuilder.resume_builder_api.service.fileUploadService;
@@ -24,6 +25,12 @@ public class AuthController {
     private final AuthService authService;
 
     private final fileUploadService fileUploadService;
+
+    // status
+    @GetMapping("/status")
+    public ResponseEntity<?> status() {
+        return ResponseEntity.ok(Map.of("status", "ok"));
+    }
 
     @PostMapping(AppConstant.REGISTER)
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
@@ -52,6 +59,18 @@ public class AuthController {
         log.info("Image uploaded successfully: {}", imageUrl);
         return ResponseEntity.ok(imageUrl);
 
+    }
+
+    @PostMapping(AppConstant.LOGIN)
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+        return ResponseEntity.ok(authService.login(loginRequest));
+    }
+
+    // make endpoint for logout
+    @GetMapping("/sam")
+    public ResponseEntity<?> logout() {
+        log.info("Logout");
+        return ResponseEntity.ok("sam");
     }
 
 }

@@ -3,12 +3,17 @@ package com.reer.resumebuilder.resume_builder_api.service;
 
 import com.reer.resumebuilder.resume_builder_api.documents.User;
 import com.reer.resumebuilder.resume_builder_api.dto.AuthResponse;
+import com.reer.resumebuilder.resume_builder_api.dto.LoginRequest;
 import com.reer.resumebuilder.resume_builder_api.dto.RegisterRequest;
 import com.reer.resumebuilder.resume_builder_api.exception.ResourceExistsException;
+import com.reer.resumebuilder.resume_builder_api.exception.UserNotVerifiedException;
 import com.reer.resumebuilder.resume_builder_api.repository.UserRepository;
+import com.reer.resumebuilder.resume_builder_api.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +26,10 @@ public class AuthService {
 
     private final EmailService emailService;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+
+    
     @Value("${app.base.url:http://localhost:8080}")
     private String appUrl;
 
@@ -104,6 +113,7 @@ public class AuthService {
                 .emailVerified(user.isEmailVerified())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
+
                 .build();
 
     }
@@ -114,13 +124,38 @@ public class AuthService {
         return User.builder()
                 .name(registerRequest.getName())
                 .email(registerRequest.getEmail())
-                .password(registerRequest.getPassword())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .profileImageUrl(registerRequest.getProfileImageUrl())
                 .subscriptionPlan("Basic")
                 .emailVerified(false)
                 .verificationToken(UUID.randomUUID().toString())
                 .verificationExpires(LocalDateTime.now().plusHours(24))
                 .build();
+    }
+
+    public AuthResponse login(LoginRequest loginRequest) {
+        log.info("Inside login method");
+        User existingUser = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> {
+                    log.warn("Invalid login attempt for email: {}", loginRequest.getEmail());
+                    return new UsernameNotFoundException("Invalid email or password");
+                });
+        if (passwordEncoder.matches(loginRequest.getPassword(), existingUser.getPassword())) {
+            log.info("Login successful for email: {}", loginRequest.getEmail());
+            if (!existingUser.isEmailVerified()) {
+                throw new UserNotVerifiedException("User not verified");
+            }
+            String jwtToken = jwtUtil.generateToken(existingUser.getEmail());
+            AuthResponse response = toResponse(existingUser);
+            response.setToken(jwtToken);
+            return response;
+
+        } else {
+            log.warn("Invalid login attempt for email: {}", loginRequest.getEmail());
+            throw new RuntimeException("Invalid email or password");
+        }
+
+
     }
 }
 

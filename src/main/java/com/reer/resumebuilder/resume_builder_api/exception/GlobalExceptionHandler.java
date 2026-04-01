@@ -17,11 +17,22 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
 
+    @ExceptionHandler(UserNotVerifiedException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotVerifiedException(UserNotVerifiedException e) {
+        log.info("User not verified : {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ErrorResponse.builder()
+                .message(List.of(e.getMessage()))
+                .status(HttpStatus.NOT_ACCEPTABLE.toString())
+                .timeStamp(System.currentTimeMillis())
+                .build());
+    }
+
+
     @ExceptionHandler(ResourceExistsException.class)
     public ResponseEntity<ErrorResponse> handleResourceExistsException(ResourceExistsException e) {
         log.info("Resource already exists : {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.builder()
-                .message(List.of("Resource already exists", e.getMessage()))
+                .message(List.of(e.getMessage()))
                 .status(HttpStatus.CONFLICT.toString())
                 .timeStamp(System.currentTimeMillis())
                 .build());

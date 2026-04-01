@@ -28,3 +28,8 @@ cloudinary:
   cloud-name: dotiydeyr
   api-key: 738942934367549
   api-secret: ${cloudinary_secret}
+# jwt config
+jwt:
+  secret: ${jwt_secret}
+  expiration: 86400000
+
