@@ -16,11 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping(AppConstant.AUTH_CONTROLLER)
+// authentication is not applied yet any  user can access any others users data and change it it is critical it should be changed
 public class AuthController {
     private final AuthService authService;
 
@@ -71,6 +73,28 @@ public class AuthController {
     public ResponseEntity<?> logout() {
         log.info("Logout");
         return ResponseEntity.ok("sam");
+    }
+
+    @PostMapping(AppConstant.RE_SEND_VERIFICATION_EMAIL)
+    public ResponseEntity<?> resendVerificationEmail(@RequestBody Map<String, String> body) {
+        log.info("Resending verification email with token: {}", body.get("email"));
+        String email = body.get("email");
+        if (Objects.isNull(email) || email.isEmpty()) {
+            log.warn("Email is missing in the request body");
+            throw new RuntimeException("Email is empty or email is null --> email should not be empty or null");
+        }
+        authService.resendVerificationEmail(email);
+
+        log.info("Resend verification email");
+        return ResponseEntity.ok(Map.of("success", true, "message", "Verification email sent successfully"));
+    }
+
+    // engpoint to get current user
+    @GetMapping(AppConstant.CURRENT_USER)
+    public ResponseEntity<?> getCurrentUser() {
+        log.info("Getting current user inside controller");
+
+        return ResponseEntity.ok(authService.getCurrentUser());
     }
 
 }

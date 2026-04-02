@@ -12,6 +12,9 @@ import com.reer.resumebuilder.resume_builder_api.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,7 +32,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    
+
     @Value("${app.base.url:http://localhost:8080}")
     private String appUrl;
 
@@ -157,6 +160,39 @@ public class AuthService {
 
 
     }
+
+    public void resendVerificationEmail(String email) {
+        log.info("Resending verification email to {}", email);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> {
+                    log.warn("User not found with email: {}", email);
+                    return new UsernameNotFoundException("User not found with email: " + email);
+                });
+        if (user.isEmailVerified()) {
+            log.warn("User with email {} is already verified", email);
+            throw new RuntimeException("User is already verified");
+        }
+        user.setVerificationToken(UUID.randomUUID().toString());
+        user.setVerificationExpires(LocalDateTime.now().plusHours(24));
+        userRepository.save(user);
+        sendVerificationEmail(user);
+    }
+
+    public AuthResponse getCurrentUser() {
+        log.info("Getting current user inside service");
+        SecurityContext context = SecurityContextHolder.getContext();
+        if (context == null) {
+            log.warn("Security context is null");
+            throw new RuntimeException("Security context is null");
+        }
+
+        Authentication authentication = context.getAuthentication();
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+            log.warn("You've deleted your account already but you are using old jwt token :{}", email);
+            return new UsernameNotFoundException("You've deleted your account already but you are using old jwt token" + email);
+        });
+
+        return toResponse(user);
+    }
 }
-
-
