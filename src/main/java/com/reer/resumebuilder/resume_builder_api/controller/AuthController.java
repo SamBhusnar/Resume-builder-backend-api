@@ -4,7 +4,7 @@ import com.reer.resumebuilder.resume_builder_api.dto.AuthResponse;
 import com.reer.resumebuilder.resume_builder_api.dto.LoginRequest;
 import com.reer.resumebuilder.resume_builder_api.dto.RegisterRequest;
 import com.reer.resumebuilder.resume_builder_api.service.AuthService;
-import com.reer.resumebuilder.resume_builder_api.service.fileUploadService;
+import com.reer.resumebuilder.resume_builder_api.service.FileUploadService;
 import com.reer.resumebuilder.resume_builder_api.util.AppConstant;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.Objects;
 public class AuthController {
     private final AuthService authService;
 
-    private final fileUploadService fileUploadService;
+    private final FileUploadService fileUploadService;
 
     // status
     @GetMapping("/status")

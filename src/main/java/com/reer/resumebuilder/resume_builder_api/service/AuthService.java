@@ -105,7 +105,7 @@ public class AuthService {
     // create method that convert user to authResponse
 
 
-    private AuthResponse toResponse(User user) {
+    public AuthResponse toResponse(User user) {
         log.info("Converting user to authResponse");
         return AuthResponse.builder()
                 .id(user.getId())
@@ -122,7 +122,7 @@ public class AuthService {
     }
 
     // for request
-    private User toDocument(RegisterRequest registerRequest) {
+    public User toDocument(RegisterRequest registerRequest) {
         log.info("Converting registerRequest to User");
         return User.builder()
                 .name(registerRequest.getName())
@@ -195,4 +195,6 @@ public class AuthService {
 
         return toResponse(user);
     }
+
+
 }

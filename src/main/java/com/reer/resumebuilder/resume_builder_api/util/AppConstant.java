@@ -10,4 +10,8 @@ public class AppConstant {
 
     public static final String RE_SEND_VERIFICATION_EMAIL = "/resend-verification-email";
     public static final String CURRENT_USER = "/profile";
+    public static final String API_VERSION = "/api/v1";
+    public static final String API_RESUME = "/resumes";
+    public static final String ID = "/{id}";
+    public static final String UPLOAD_IMAGES = "/upload-images";
 }

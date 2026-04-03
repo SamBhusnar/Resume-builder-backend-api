@@ -24,9 +24,9 @@ public class User {
     private String email;
     private String password;
     private String profileImageUrl;
-    // sUbcription plan
-    private String subscriptionPlan="basic";
-    private boolean emailVerified=false;
+    // subscription plan
+    private String subscriptionPlan = "basic";
+    private boolean emailVerified = false;
     private String verificationToken;
     private LocalDateTime verificationExpires;
     @CreatedDate
