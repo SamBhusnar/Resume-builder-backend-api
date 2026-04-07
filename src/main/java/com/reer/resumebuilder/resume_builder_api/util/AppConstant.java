@@ -16,4 +16,6 @@ public class AppConstant {
     public static final String UPLOAD_IMAGES = "/upload-images";
     public static final String TEMPLATE = "/templates";
     public static final String PREMIUM = "PREMIUM";
+    public static final String EMAIL = "/email";
+    public static final String EMAIL_RESUME = "/send-resume";
 }
