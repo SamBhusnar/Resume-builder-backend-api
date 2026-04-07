@@ -1,2 +1,5 @@
-Currently i am working on this project once the project is completed i will update content inside this file that is
-README.md
+This project is currently in the final stage of development. All major functionalities have been implemented, with only
+the payment gateway integration using Razorpay remaining.
+
+Upon completion, this README will be updated with comprehensive documentation, including project features, installation
+steps, and usage instructions.
