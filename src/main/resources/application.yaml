@@ -4,7 +4,7 @@ spring:
     # mongodb local settings
   data:
     mongodb:
-      uri: mongodb://localhost:27017/resumebuilder_v2
+      uri: ${MONGODB_URI:mongodb://localhost:27017/resumebuilder_v2}
   # mail config
   mail:
     host: smtp-relay.brevo.com

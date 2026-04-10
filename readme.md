@@ -9,7 +9,7 @@ with ease. The platform supports authentication, premium features, secure paymen
 
 ### 👤 User Features
 
-* User Registration & Login (JWT आधारित authentication)
+* User Registration & Login (JWT based authentication)
 * Secure authentication using Spring Security
 * Create, update, and delete resumes
 * Manage multiple resumes per user
@@ -100,7 +100,7 @@ com.project.resume
 ### 1️⃣ Clone Repository
 
 ```
-git clone https://github.com/your-username/resume-builder.git
+git clone https://github.com/SamBhusnar/Resume-builder-backend-api.git resume-builder
 cd resume-builder
 ```
 
@@ -112,10 +112,11 @@ Create `.env` or configure in `application.yml`:
 
 ```
 MONGODB_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
-CLOUDINARY_URL=your_cloudinary_url
-RAZORPAY_KEY=your_key
-RAZORPAY_SECRET=your_secret
+key=your_bravo_key
+jwt_secret=your_jwt_secret
+cloudinary_secret=your_cloudinary_secret
+razorpay_key=your_key
+razorpay_secret=your_secret
 ```
 
 ---
