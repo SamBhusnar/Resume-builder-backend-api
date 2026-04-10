@@ -32,4 +32,8 @@ cloudinary:
 jwt:
   secret: ${jwt_secret}
   expiration: 86400000
+# razor key and razor pay secret
+razorpay:
+  key: ${razorpay_key}
+  secret: ${razorpay_secret}
 
